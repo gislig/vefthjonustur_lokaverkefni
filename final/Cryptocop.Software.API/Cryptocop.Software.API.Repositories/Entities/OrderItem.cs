@@ -9,8 +9,8 @@ public class OrderItem
     public int OrderId { get; set; }
     public Order Order { get; set; }
     
-    string ProductIdentifier { get; set; }
-    double? Quantity { get; set; }
-    double? UnitPrice { get; set; }
-    double? TotalPrice { get; set; }
+    public string ProductIdentifier { get; set; }
+    public double? Quantity { get; set; }
+    public double? UnitPrice { get; set; }
+    public double? TotalPrice { get; set; }
 }

@@ -9,17 +9,17 @@ public class Order
     public int UserId { get; set; }
     public User User { get; set; }    
     
-    string Email { get; set; }
-    string FullName { get; set; }
-    string StreetName { get; set; }
-    string HouseNumber { get; set; }
-    string ZipCode { get; set; }
-    string City { get; set; }
-    string Country { get; set; }
-    string CardHolderName { get; set; }
-    string MaskedCreditCard { get; set; }
-    DateTime OrderDate { get; set; }
-    double? TotalPrice { get; set; }
+    public string Email { get; set; }
+    public string FullName { get; set; }
+    public string StreetName { get; set; }
+    public string HouseNumber { get; set; }
+    public string ZipCode { get; set; }
+    public string City { get; set; }
+    public string Country { get; set; }
+    public string CardHolderName { get; set; }
+    public string MaskedCreditCard { get; set; }
+    public DateTime OrderDate { get; set; }
+    public double? TotalPrice { get; set; }
     
     public ICollection<OrderItem> OrderItems { get; set; }
 }

@@ -9,7 +9,7 @@ public class ShoppingCartItem
     public int ShoppingCartId { get; set; }
     public ShoppingCart ShoppingCart { get; set; }
     
-    string ProductIdentifier { get; set; }
-    double? Quantity { get; set; }
-    double? UnitPrice { get; set; }
+    public string ProductIdentifier { get; set; }
+    public double? Quantity { get; set; }
+    public double? UnitPrice { get; set; }
 }
