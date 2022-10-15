@@ -1,9 +1,11 @@
-using System.Text.Json.Serialization;
-using Cryptocop.Software.API.Services.Implementations;
-using Cryptocop.Software.API.Services.Interfaces;
-using Microsoft.AspNetCore.Mvc;
-
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<CrytoDbContext>(
+    opt => opt.UseNpgsql(
+        builder.Configuration.GetConnectionString(
+            "CryptocopConnectionString"),
+        b => 
+            b.MigrationsAssembly("Cryptocop.Software.API")));
 
 builder.Services.AddScoped<IQueueService, QueueService>();
 builder.Services.Configure<ApiBehaviorOptions>(options =>
