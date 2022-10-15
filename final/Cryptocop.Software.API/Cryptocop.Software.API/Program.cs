@@ -1,7 +1,6 @@
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-/*
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -18,8 +17,7 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]))
     };
-});
-*/
+}); 
 //builder.Services.AddTransient<ITokenService, TokenService>();
 
 builder.Services.AddDbContext<CrytoDbContext>(opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("CryptocopConnectionString"), b => b.MigrationsAssembly("Cryptocop.Software.API")));
@@ -50,7 +48,6 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
     c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
-    /*
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -74,7 +71,6 @@ builder.Services.AddSwaggerGen(c =>
             new string[] {}
         }
     });
-    */
 });
 //builder.Services.AddAuthorization();
 
@@ -90,7 +86,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
-//app.UseAuthorization();
+app.UseAuthorization();
 
 app.MapControllers();
 

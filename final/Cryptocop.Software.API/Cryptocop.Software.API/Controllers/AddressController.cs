@@ -22,7 +22,7 @@
         
         // TODO: Adds a new address associated with authenticated user, see models section for reference. Review FromBody
         [HttpPost]
-        public IActionResult AddAddress([FromBody] string address)
+        public IActionResult AddAddress([FromBody] AddressInputModel addressInput)
         {
             throw new NotImplementedException();
         }

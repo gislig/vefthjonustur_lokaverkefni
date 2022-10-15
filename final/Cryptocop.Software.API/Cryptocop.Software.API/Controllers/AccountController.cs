@@ -15,14 +15,14 @@
         
         // TODO: Register
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] UserDto userDto)
+        public async Task<IActionResult> Register([FromBody] RegisterInputModel userRegistrationInput)
         {
             throw new NotImplementedException();
         }
         
         // TODO: Signin
         [HttpPost("signin")]
-        public async Task<IActionResult> Signin([FromBody] UserDto userDto)
+        public async Task<IActionResult> Signin([FromBody] LoginInputModel loginInput)
         {
             throw new NotImplementedException();
         }

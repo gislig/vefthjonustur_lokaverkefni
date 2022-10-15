@@ -21,7 +21,7 @@
         
         // TODO: Add a new order associated with the authenticated ser, see Models section for reference. Remember to update FRomBody.
         [HttpPost]
-        public async Task<IActionResult> AddOrder([FromBody] string order)
+        public async Task<IActionResult> AddOrder([FromBody] OrderInputModel orderInput)
         {
             throw new NotImplementedException();
         }

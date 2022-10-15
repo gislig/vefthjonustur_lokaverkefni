@@ -21,7 +21,7 @@
         
         // TODO: Add item to the chopping cart, see Models section for reference. Note need to update FromBody InputModel
         [HttpPost]
-        public async Task<IActionResult> AddItemToShoppingCart([FromBody] string inputModel)
+        public async Task<IActionResult> AddItemToShoppingCart([FromBody] ShoppingCartItemInputModel shoppingCartItemInput)
         {
             throw new NotImplementedException();
         }
@@ -35,7 +35,7 @@
         
         // TODO : Update an item from the shopping cart, remember to set the inputModel
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateItemFromShoppingCart(int id, [FromBody] string inputModel)
+        public async Task<IActionResult> UpdateItemFromShoppingCart(int id, [FromBody] ShoppingCartItemInputModel shoppingCartItemInput)
         {
             throw new NotImplementedException();
         }

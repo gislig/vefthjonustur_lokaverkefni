@@ -9,3 +9,4 @@ global using System.Text;
 global using Microsoft.IdentityModel.Tokens;
 global using AutoMapper;
 global using Cryptocop.Software.API.Models.Dtos;
+global using Cryptocop.Software.API.Models.InputModels;

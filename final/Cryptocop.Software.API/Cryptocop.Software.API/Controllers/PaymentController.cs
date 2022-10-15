@@ -21,7 +21,7 @@
         
         // TODO: Adds a new payment card associated with the authenticated user
         [HttpPost]
-        public async Task<IActionResult> AddPayment([FromBody] string payment)
+        public async Task<IActionResult> AddPayment([FromBody] PaymentCardInputModel paymentInput)
         {
             throw new NotImplementedException();
         }
