@@ -1,6 +1,4 @@
-﻿using System;
-using System.Text;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace Cryptocop.Software.API.Repositories.Helpers
 {
@@ -18,5 +16,10 @@ namespace Cryptocop.Software.API.Repositories.Helpers
         }
         private static byte[] CreateSalt() =>
             Convert.FromBase64String(Convert.ToBase64String(Encoding.UTF8.GetBytes(_salt)));
+
+        public static bool VerifyPassword(string password, string hashedPassword)
+        {
+            return HashPassword(password) == hashedPassword;
+        }
     }
 }

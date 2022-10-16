@@ -5,9 +5,9 @@ public class User
     [Key]
     public int Id { get; set; }
     
-    string FullName { get; set; } = "";
-    string Email { get; set; } = "";
-    string HashedPassword { get; set; } = "";
+    public string FullName { get; set; } = "";
+    public string Email { get; set; } = "";
+    public string HashedPassword { get; set; } = "";
     
     IEnumerable<PaymentCard> PaymentCards { get; set; }
     IEnumerable<Address> Addresses { get; set; }

@@ -7,6 +7,17 @@ namespace Cryptocop.Software.API.Repositories.Implementations
 {
     public class ShoppingCartRepository : IShoppingCartRepository
     {
+        private readonly CrytoDbContext _dbContext;
+        private readonly IMapper _mapper;
+        private readonly ITokenRepository _tokenRepository;
+        
+        public ShoppingCartRepository(CrytoDbContext dbContext, IMapper mapper, ITokenRepository tokenRepository)
+        {
+            _dbContext = dbContext;
+            _mapper = mapper;
+            _tokenRepository = tokenRepository;
+        }
+        
         public IEnumerable<ShoppingCartItemDto> GetCartItems(string email)
         {
             throw new System.NotImplementedException();

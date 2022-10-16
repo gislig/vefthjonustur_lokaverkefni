@@ -5,7 +5,6 @@ namespace Cryptocop.Software.API.Models.Dtos
         public string Identifier { get; set; }
         public string Email { get; set; }
         public string FullName { get; set; }
-        [JsonIgnore]
-        public string TokenId { get; set; }
+        public int TokenId { get; set; }
     }
 }

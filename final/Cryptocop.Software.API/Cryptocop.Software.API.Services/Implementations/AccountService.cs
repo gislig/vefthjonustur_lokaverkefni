@@ -1,24 +1,33 @@
-﻿using Cryptocop.Software.API.Models.Dtos;
-using Cryptocop.Software.API.Models.InputModels;
-using Cryptocop.Software.API.Services.Interfaces;
-
-namespace Cryptocop.Software.API.Services.Implementations
+﻿namespace Cryptocop.Software.API.Services.Implementations
 {
     public class AccountService : IAccountService
     {
+        private readonly IUserRepository _userRepository;
+        
+        public AccountService(IUserRepository userRepository)
+        {
+            _userRepository = userRepository;
+        }
         public UserDto CreateUser(RegisterInputModel inputModel)
         {
-            throw new System.NotImplementedException();
+            var user = _userRepository.CreateUser(inputModel);
+            return user;
         }
 
         public UserDto AuthenticateUser(LoginInputModel loginInputModel)
         {
-            throw new System.NotImplementedException();
+            var user = _userRepository.AuthenticateUser(loginInputModel);
+            return user;
         }
 
+        // TODO: Need to implement logout functionality in repostitory
         public void Logout(int tokenId)
         {
-            throw new System.NotImplementedException();
+            var token = _userRepository.LogoutUser(tokenId);
+            if (token == null || token == false)
+            {
+                throw new Exception("Token not found or could not be deleted");
+            }
         }
     }
 }
