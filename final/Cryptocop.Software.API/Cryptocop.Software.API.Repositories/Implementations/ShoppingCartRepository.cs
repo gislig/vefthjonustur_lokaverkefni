@@ -20,32 +20,78 @@ namespace Cryptocop.Software.API.Repositories.Implementations
         
         public IEnumerable<ShoppingCartItemDto> GetCartItems(string email)
         {
-            throw new System.NotImplementedException();
+            var user = _dbContext.Users.FirstOrDefault(u => u.Email == email);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            var cartItems = _dbContext
+                .ShoppingCarts
+                .Include(u => u.User)
+                .Include(i => i.ShoppingCartItems)
+                .All(c => c.User.Email == email);
+            
+            // Map the shopping cart items to the DTO
+            return _mapper.Map<IEnumerable<ShoppingCartItemDto>>(cartItems);
         }
 
         public void AddCartItem(string email, ShoppingCartItemInputModel shoppingCartItemItem, float priceInUsd)
         {
-            throw new System.NotImplementedException();
+            var user = _dbContext.Users.FirstOrDefault(u => u.Email == email);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+            
         }
 
         public void RemoveCartItem(string email, int id)
         {
-            throw new System.NotImplementedException();
+            var user = _dbContext.Users.FirstOrDefault(u => u.Email == email);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+            var cartItem = _dbContext.ShoppingCartItems.FirstOrDefault(i => i.Id == id);
+            if (cartItem == null)
+            {
+                throw new Exception("Item not found");
+            }
         }
 
         public void UpdateCartItemQuantity(string email, int id, float quantity)
         {
-            throw new System.NotImplementedException();
+            var user = _dbContext.Users.FirstOrDefault(u => u.Email == email);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+            var cartItem = _dbContext.ShoppingCartItems.FirstOrDefault(i => i.Id == id);
+            if (cartItem == null)
+            {
+                throw new Exception("Item not found");
+            }
         }
 
         public void ClearCart(string email)
         {
-            throw new System.NotImplementedException();
+            var user = _dbContext.Users.FirstOrDefault(u => u.Email == email);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+            
         }
 
         public void DeleteCart(string email)
         {
-            throw new System.NotImplementedException();
+            var user = _dbContext.Users.FirstOrDefault(u => u.Email == email);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+            
         }
     }
 }

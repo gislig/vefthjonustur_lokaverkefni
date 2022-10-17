@@ -18,3 +18,4 @@ global using Swashbuckle.AspNetCore.Annotations;
 global using Cryptocop.Software.API.Repositories.Entities;
 global using Microsoft.AspNetCore.Authorization;
 global using Swashbuckle.AspNetCore.Filters;
+global using System.Security.Claims;

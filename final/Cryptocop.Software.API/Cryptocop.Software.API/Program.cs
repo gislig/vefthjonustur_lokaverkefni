@@ -16,6 +16,8 @@ builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<IPaymentService, PaymentService>();
 builder.Services.AddTransient<IPaymentRepository, PaymentRepository>();
+builder.Services.AddTransient<IOrderService, OrderService>();
+builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 
 builder.Services.AddDistributedMemoryCache();
 string sessionTimeout = builder.Configuration["Session:SessionTimeout"];

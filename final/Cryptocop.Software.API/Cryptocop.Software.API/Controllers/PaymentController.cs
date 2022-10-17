@@ -20,9 +20,8 @@
         [HttpGet, Authorize]
         public async Task<IActionResult> GetAllPayments()
         {
-            var header = Request.Headers["Authorization"].ToString().Split(" ")[1];
-            var user = _sessionService.GetSetUserSession(header);
-            var email = user.Email;
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+
             
             try{
                 var payments = _paymentService.GetStoredPaymentCards(email);
@@ -40,9 +39,8 @@
         [HttpPost, Authorize]
         public async Task<IActionResult> AddPayment([FromBody] PaymentCardInputModel paymentInput)
         {
-            var header = Request.Headers["Authorization"].ToString().Split(" ")[1];
-            var user = _sessionService.GetSetUserSession(header);
-            var email = user.Email;
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+
             
             try{
                 _paymentService.AddPaymentCard(email, paymentInput);

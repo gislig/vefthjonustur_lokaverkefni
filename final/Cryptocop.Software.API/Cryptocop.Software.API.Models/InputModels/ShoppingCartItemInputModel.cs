@@ -5,6 +5,6 @@ namespace Cryptocop.Software.API.Models.InputModels
         [Required]
         public string ProductIdentifier { get; set; }
         [Required]
-        public float? Quantity { get; set; }
+        public float Quantity { get; set; }
     }
 }

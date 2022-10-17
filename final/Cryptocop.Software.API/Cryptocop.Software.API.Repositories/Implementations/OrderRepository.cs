@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Cryptocop.Software.API.Models.Dtos;
-using Cryptocop.Software.API.Models.InputModels;
-using Cryptocop.Software.API.Repositories.Interfaces;
-
-namespace Cryptocop.Software.API.Repositories.Implementations
+﻿namespace Cryptocop.Software.API.Repositories.Implementations
 {
     public class OrderRepository : IOrderRepository
     {
@@ -20,12 +14,33 @@ namespace Cryptocop.Software.API.Repositories.Implementations
         }
         public IEnumerable<OrderDto> GetOrders(string email)
         {
-            throw new NotImplementedException();
+            var user = _dbContext.Users.FirstOrDefault(u => u.Email == email);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+            
+            var orders = _dbContext.Orders.Where(o => o.Email == email).ToList();
+            return _mapper.Map<IEnumerable<OrderDto>>(orders);
         }
 
         public OrderDto CreateNewOrder(string email, OrderInputModel order)
         {
-            throw new NotImplementedException();
+            var user = _dbContext.Users.FirstOrDefault(u => u.Email == email);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+            // TODO: Hvað á að gera hérna, er ekki alveg viss hvernig á að tengja þetta samann
+            var orderEntity = _mapper.Map<Order>(order);
+            orderEntity.Email = email;
+            orderEntity.User = user;
+            orderEntity.UserId = user.Id;
+            orderEntity.OrderDate = DateTime.Now.ToUniversalTime(); 
+            //_dbContext.Orders.Add(orderEntity);
+            //_dbContext.SaveChanges();
+            
+            return _mapper.Map<OrderDto>(orderEntity);
         }
     }
 }

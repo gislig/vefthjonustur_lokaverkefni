@@ -1,9 +1,4 @@
-﻿using System.Collections;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using Newtonsoft.Json;
-
-namespace Cryptocop.Software.API.Controllers
+﻿namespace Cryptocop.Software.API.Controllers
 {
     [Route("api/addresses")]
     [ApiController]
@@ -23,10 +18,10 @@ namespace Cryptocop.Software.API.Controllers
         [HttpGet, Authorize]
         public async Task<IActionResult> GetAddresses()
         {
-            var header = Request.Headers["Authorization"].ToString().Split(" ")[1];
-            var user = _sessionService.GetSetUserSession(header);
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+
             try{
-                return Ok(_addressService.GetAllAddresses(user.Email));
+                return Ok(_addressService.GetAllAddresses(email));
             }
             catch(Exception e){
                 return BadRequest(e.Message);
@@ -39,9 +34,8 @@ namespace Cryptocop.Software.API.Controllers
         [HttpPost, Authorize]
         public async Task<IActionResult> AddAddress([FromBody] AddressInputModel addressInput)
         {
-            var header = Request.Headers["Authorization"].ToString().Split(" ")[1];
-            var user = _sessionService.GetSetUserSession(header);
-            var email = user.Email;
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+
             
             try{
                 _addressService.AddAddress(email, addressInput);
@@ -58,9 +52,8 @@ namespace Cryptocop.Software.API.Controllers
         [HttpDelete("{id}"), Authorize]
         public async Task<IActionResult> RemoveAddress(int id)
         {
-            var header = Request.Headers["Authorization"].ToString().Split(" ")[1];
-            var user = _sessionService.GetSetUserSession(header);
-            var email = user.Email;
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+
             
             try{
                 _addressService.DeleteAddress(email, id);

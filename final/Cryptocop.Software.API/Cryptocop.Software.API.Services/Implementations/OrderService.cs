@@ -7,14 +7,21 @@ namespace Cryptocop.Software.API.Services.Implementations
 {
     public class OrderService : IOrderService
     {
+        private readonly IOrderRepository _orderRepository;
+        
+        public OrderService(IOrderRepository orderRepository)
+        {
+            _orderRepository = orderRepository;
+        }
+        
         public IEnumerable<OrderDto> GetOrders(string email)
         {
-            throw new System.NotImplementedException();
+            return _orderRepository.GetOrders(email);
         }
 
         public void CreateNewOrder(string email, OrderInputModel order)
         {
-            throw new System.NotImplementedException();
+            _orderRepository.CreateNewOrder(email, order);
         }
     }
 }

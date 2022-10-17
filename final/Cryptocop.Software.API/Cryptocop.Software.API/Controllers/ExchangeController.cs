@@ -16,6 +16,8 @@
         [HttpGet]
         public async Task<IActionResult> GetExchanges([FromQuery] int paginationQuery)
         {
+            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+
             throw new NotImplementedException();
         }
     }
