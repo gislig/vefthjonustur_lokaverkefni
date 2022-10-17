@@ -27,17 +27,18 @@ namespace Cryptocop.Software.API.Repositories.Implementations
                 throw new Exception("User not found");
             }
             
-            try
-            {
+            //try
+            //{
                 var addressEntity = _mapper.Map<Address>(address);
+                //addressEntity.UserId = user.Id;
                 addressEntity.User = user;
                 _dbContext.Addresses.Add(addressEntity);
                 _dbContext.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Could not add address");
-            }
+            //}
+            //catch (Exception e)
+            //{
+            //    throw new Exception("Could not add address");
+            //}
         }
 
         public IEnumerable<AddressDto> GetAllAddresses(string email)

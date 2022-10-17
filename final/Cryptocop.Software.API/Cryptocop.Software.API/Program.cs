@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Cryptocop.Software.API;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,9 @@ builder.Services.AddTransient<IUserSessionRepository, UserSessionRepository>();
 builder.Services.AddTransient<IUserSessionService, UserSessionService>();
 builder.Services.AddTransient<IAddressService, AddressService>();
 builder.Services.AddTransient<IAddressRepository, AddressRepository>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IAccountService, AccountService>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddDistributedMemoryCache();
 string sessionTimeout = builder.Configuration["Session:SessionTimeout"];
@@ -23,8 +27,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 {
     o.TokenValidationParameters = new TokenValidationParameters
     {
-        //ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        //ValidAudience = builder.Configuration["Jwt:Audience"],
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey
             (Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"])),
         ValidateIssuer = false,
@@ -34,25 +38,19 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
     o.Events = new JwtBearerEvents()
     {
+        
         OnTokenValidated = async context =>
         {
-            var claim = context.Principal.Claims.FirstOrDefault(c => c.Type == "tokenId").Value;
+            var tokenId = context.Principal.Claims.FirstOrDefault(c => c.Type == "tokenId").Value;
             var email = context.Principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email).Value;
             var name = context.Principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
             var fullName = context.Principal.Claims.FirstOrDefault(c => c.Type == "fullName").Value;
             // get new claim and convert the claim into an array of data
+
             
-            // get the token service
-            var tokenService = context.HttpContext.RequestServices.GetRequiredService<ITokenService>();
-            int.TryParse(claim, out var tokenId);
-            Console.WriteLine("Found token : " + tokenId);
-            Console.WriteLine("Found email : " + email);
-            Console.WriteLine("Found name : " + name);
-            Console.WriteLine("Found fullName : " + fullName);
+            var token = context.HttpContext.Session.GetString("Token");
+            //Console.WriteLine("Found token in middleware service :" + token);
             
-            // TODO: Finish middleware for token validation
-            //var tokenService = context.HttpContext.RequestServices.GetService<IJwtTokenService>();
-            //var tokenBlacklisted = myTokenService.IsBlacklisted(tokenId);
             /*
             Console.WriteLine();
             if(tokenService.IsTokenBlacklisted(tokenId))
@@ -67,9 +65,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         }
     };
 });
-
-builder.Services.AddTransient<IUserRepository, UserRepository>();
-builder.Services.AddTransient<IAccountService, AccountService>();
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddDbContext<CrytoDbContext>(opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("CryptocopConnectionString"), b => b.MigrationsAssembly("Cryptocop.Software.API")));
@@ -147,5 +142,16 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.Use(async (context, next) =>
+{
+    var token = context.Session.GetString("Token");
+    //Console.WriteLine("Token from session: " + token);
+    if (!string.IsNullOrEmpty(token))
+    {
+        //context.Request.Headers.Add("Authorization", "bearer " + token);
+    }
+    await next();
+});
 
 app.Run();

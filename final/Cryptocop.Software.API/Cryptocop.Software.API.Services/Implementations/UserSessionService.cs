@@ -8,7 +8,12 @@ public class UserSessionService : IUserSessionService
     {
         _userSessionRepository = userSessionRepository;
     }
-    
+
+    public UserDto GetSetUserSession(string header)
+    {
+        return _userSessionRepository.GetSetUserSession(header);
+    }
+
     public bool CreateUserSession(UserDto user)
     {
         return _userSessionRepository.CreateUserSession(user);

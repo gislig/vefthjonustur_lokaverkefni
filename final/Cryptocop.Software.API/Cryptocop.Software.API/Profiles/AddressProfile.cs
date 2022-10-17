@@ -6,5 +6,7 @@ public class AddressProfile : Profile
     {
         CreateMap<Address, AddressDto>();
         CreateMap<AddressDto, Address>();
+        CreateMap<AddressInputModel, Address>();
+        CreateMap<Address, AddressInputModel>();
     }
 }

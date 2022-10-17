@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.IdentityModel.Tokens.Jwt;
+using Newtonsoft.Json;
 
 namespace Cryptocop.Software.API.Controllers
 {
@@ -58,7 +59,7 @@ namespace Cryptocop.Software.API.Controllers
                     if(user.TokenId != null && _tokenService.IsBlacklisted(user.TokenId))
                         return BadRequest("User is blacklisted");
                     
-                    return Ok(user);
+                    return Ok(user.Identifier);
                 }
             }
 
@@ -80,8 +81,11 @@ namespace Cryptocop.Software.API.Controllers
             
             // If there is no session then continue with creating a new session
             var tokenString = _tokenService.GenerateJwtToken(result);
+            var tokenHandler = new JwtSecurityTokenHandler();
+            //tokenHandler.WriteToken(tokenString);
+            
             result.Identifier = tokenString;
-
+            HttpContext.Session.SetString("Token", tokenString);
             // TODO: Fix this, it seems like I get a null reference exception here, I am baffled
             //var success = _userSessionRepository.CreateUserSession(result);
             //if(!success)
@@ -90,7 +94,7 @@ namespace Cryptocop.Software.API.Controllers
             var newData = Encoding.UTF8.GetBytes(json);
             HttpContext.Session.Set("user", newData);
 
-            return Ok(result);
+            return Ok(tokenString);
         }
 
         /// <summary>Sign out a user</summary>

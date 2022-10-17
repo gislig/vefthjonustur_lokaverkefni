@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using Newtonsoft.Json;
 
 namespace Cryptocop.Software.API.Controllers
@@ -9,7 +11,6 @@ namespace Cryptocop.Software.API.Controllers
     {
         private readonly IAddressService _addressService;
         private readonly IUserSessionService _sessionService;
-        
         public AddressController(IAddressService addressService, IUserSessionService sessionService)
         {
             _addressService = addressService;
@@ -22,19 +23,9 @@ namespace Cryptocop.Software.API.Controllers
         [HttpGet, Authorize]
         public async Task<IEnumerable<AddressDto>> GetAddresses()
         {
-            // List of empty addressesDto
-            UserDto user = new UserDto();
-            HttpContext.Session.TryGetValue("user", out var data);
-            if (data == null){
-                Console.WriteLine("No user in session");
-                return null;
-            }
-
-            user = JsonConvert.DeserializeObject<UserDto>(Encoding.UTF8.GetString(data));
-            Console.WriteLine(user.Email);
-            
-            var addresses = _addressService.GetAllAddresses(user.Email);
-            return addresses;
+            var header = Request.Headers["Authorization"].ToString().Split(" ")[1];
+            var user = _sessionService.GetSetUserSession(header);
+            return _addressService.GetAllAddresses(user.Email);
         }
         
         /// <summary>Add address to user</summary>
@@ -43,11 +34,10 @@ namespace Cryptocop.Software.API.Controllers
         [HttpPost, Authorize]
         public IActionResult AddAddress([FromBody] AddressInputModel addressInput)
         {
-            var email = _sessionService.GetUserEmail();
+            var header = Request.Headers["Authorization"].ToString().Split(" ")[1];
+            var user = _sessionService.GetSetUserSession(header);
+            var email = user.Email;
             
-
-            
-            Console.WriteLine("Whats my email : " + email);
             _addressService.AddAddress(email, addressInput);
             return Ok();
         }

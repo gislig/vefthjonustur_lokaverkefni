@@ -1,26 +1,56 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http;
+using System.Security.Claims;
+
 namespace Cryptocop.Software.API.Repositories.Implementations;
 
 public class UserSessionRepository : IUserSessionRepository
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly ISession _session;
-    //private ISession _session => _httpContextAccessor.HttpContext.Session;
+    private HttpContext _httpContext;
+    
+    public UserSessionRepository(IHttpContextAccessor httpContextAccessor)
+    {
+        _httpContext = httpContextAccessor.HttpContext;
+    }
 
+    public UserDto GetSetUserSession(string header)
+    {
+            
+        var handler = new JwtSecurityTokenHandler();
+        var jwtSecurityToken = handler.ReadJwtToken(header);
+            
+        var email = jwtSecurityToken.Claims.First(claim => claim.Type == ClaimTypes.Email).Value;
+        var name = jwtSecurityToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
+        var fullName = jwtSecurityToken.Claims.First(claim => claim.Type == "fullName").Value;
+        var tokenId = jwtSecurityToken.Claims.First(claim => claim.Type == "tokenId").Value;
+        
+        var user = new UserDto
+        {
+            Email = email,
+            FullName = fullName,
+            TokenId = Convert.ToInt32(tokenId),
+            Identifier = header
+        };
+        CreateUserSession(user);
+        return user;
+    }
+    
     public bool CreateUserSession(UserDto user)
     {
         
         var json = JsonConvert.SerializeObject(user);
         var data = Encoding.UTF8.GetBytes(json);
         
-        Console.WriteLine(user.Identifier);
+        //Console.WriteLine(user.Identifier);
         
         // save the result to session storage
 
         // Somehow this does not work
         // Create a key for the session
         // Save the session
-        _session.Set("user", data);
+        //_session.Set("user", data);
         
+        _httpContext.Session.Set("user", data);
 
         if (!IsUserLoggedIn())
             return false;
@@ -30,7 +60,7 @@ public class UserSessionRepository : IUserSessionRepository
     
     public bool RemoveUserSession()
     {
-        _session.Remove("user");
+        _httpContext.Session.Remove("user");
         if (!IsUserLoggedIn())
             return false;
         
@@ -39,14 +69,12 @@ public class UserSessionRepository : IUserSessionRepository
     
     public UserDto GetUserSessionData()
     {
+        
         if (!IsUserLoggedIn())
             return new UserDto();
             
-        _session.TryGetValue("user", out byte[] data);
-        string json = Encoding.UTF8.GetString(data);
                 
         // Convert the json to userDto
-        var userDto = JsonConvert.DeserializeObject<UserDto>(json);
                 
         // Add the token to the blacklist
         //_tokenRepository.VoidToken(userDto.TokenId);
@@ -55,7 +83,15 @@ public class UserSessionRepository : IUserSessionRepository
 
     public string GetUserToken()
     {
-        return GetUserSessionData().Identifier;
+        // Get user token from header
+        var userData = _httpContext.Session.TryGetValue("user", out var token);
+        Console.WriteLine("empty?" + token);
+        
+        // Get data from principal claims
+        
+        return "bleh";
+        
+        //return GetUserSessionData().Identifier;
     }
 
     public string GetUserFullName()
@@ -77,7 +113,7 @@ public class UserSessionRepository : IUserSessionRepository
     {
         try
         {
-            return _session.Keys.Contains("user");
+            return _httpContext.Session.Keys.Contains("user");
         }
         catch
         {
