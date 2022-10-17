@@ -21,12 +21,28 @@ namespace Cryptocop.Software.API.Repositories.Implementations
         
         public void AddPaymentCard(string email, PaymentCardInputModel paymentCard)
         {
-            throw new System.NotImplementedException();
+            var user = _dbContext.Users.FirstOrDefault(u => u.Email == email);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+            
+            var card = _mapper.Map<PaymentCard>(paymentCard);
+            card.UserId = user.Id;
+            _dbContext.PaymentCards.Add(card);
+            _dbContext.SaveChanges();
         }
 
         public IEnumerable<PaymentCardDto> GetStoredPaymentCards(string email)
         {
-            throw new System.NotImplementedException();
+            var user = _dbContext.Users.FirstOrDefault(u => u.Email == email);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+            
+            var cards = _dbContext.PaymentCards.Where(c => c.UserId == user.Id).ToList();
+            return _mapper.Map<IEnumerable<PaymentCardDto>>(cards);
         }
     }
 }

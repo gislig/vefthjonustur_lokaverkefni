@@ -4,7 +4,7 @@ namespace Cryptocop.Software.API.Models.InputModels
     {
         [Required, MinLength(3)]
         public string CardholderName { get; set; }
-        [Required, CreditCard]
+        [Required, MinLength(16), MaxLength(16), CreditCard]
         public string CardNumber { get; set; }
         [Required, Range(1, 12)]
         public int Month { get; set; }
