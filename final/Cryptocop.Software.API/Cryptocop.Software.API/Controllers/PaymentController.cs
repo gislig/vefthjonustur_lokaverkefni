@@ -4,26 +4,53 @@
     [ApiController]
     public class PaymentController : ControllerBase
     {
-        private readonly CrytoDbContext _dbContext;
-        private readonly IMapper _mapper;
+        private readonly IUserSessionService _sessionService;
+        private readonly IPaymentService _paymentService;
         
-        public PaymentController(CrytoDbContext dbContext, IMapper mapper)
+        public PaymentController(IUserSessionService sessionService, IPaymentService paymentService)
         {
-            _dbContext = dbContext;
-            _mapper = mapper;
+            _sessionService = sessionService;
+            _paymentService = paymentService;
         }
+        
+        /// <summary>Get all PaymentCards from logged in user</summary>
+        /// <response code="200">Returns all payment cards</response>
+        [SwaggerResponse(200, "Returns all payment cards associated with the user", Type = typeof(IEnumerable<PaymentCardDto>))]
         // TODO: Get all payment cards associated with the authenticated user
-        [HttpGet]
+        [HttpGet, Authorize]
         public async Task<IActionResult> GetAllPayments()
         {
-            throw new NotImplementedException();
+            var header = Request.Headers["Authorization"].ToString().Split(" ")[1];
+            var user = _sessionService.GetSetUserSession(header);
+            var email = user.Email;
+            
+            try{
+                var payments = _paymentService.GetStoredPaymentCards(email);
+                return Ok(payments);
+            }
+            catch(Exception e){
+                return BadRequest(e.Message);
+            }
         }
         
+        /// <summary>Add payment card to the logged in user</summary>
+        /// <response code="200">Return OK if payment card is added</response>
+        [SwaggerResponse(200, "Returns OK if the payment card has been added to the user", Type = typeof(IActionResult))]
         // TODO: Adds a new payment card associated with the authenticated user
-        [HttpPost]
+        [HttpPost, Authorize]
         public async Task<IActionResult> AddPayment([FromBody] PaymentCardInputModel paymentInput)
         {
-            throw new NotImplementedException();
+            var header = Request.Headers["Authorization"].ToString().Split(" ")[1];
+            var user = _sessionService.GetSetUserSession(header);
+            var email = user.Email;
+            
+            try{
+                _paymentService.AddPaymentCard(email, paymentInput);
+                return Ok();
+            }
+            catch(Exception e){
+                return BadRequest(e.Message);
+            }
         }
     }
 }
