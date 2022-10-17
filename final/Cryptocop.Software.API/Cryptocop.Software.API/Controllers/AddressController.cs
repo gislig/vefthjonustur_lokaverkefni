@@ -21,11 +21,16 @@ namespace Cryptocop.Software.API.Controllers
         /// <response code="200">Returns all addresses</response>
         [SwaggerResponse(200, "Returns all addresses associated with the user", Type = typeof(IEnumerable<AddressDto>))]
         [HttpGet, Authorize]
-        public async Task<IEnumerable<AddressDto>> GetAddresses()
+        public IActionResult GetAddresses()
         {
             var header = Request.Headers["Authorization"].ToString().Split(" ")[1];
             var user = _sessionService.GetSetUserSession(header);
-            return _addressService.GetAllAddresses(user.Email);
+            try{
+                return Ok(_addressService.GetAllAddresses(user.Email));
+            }
+            catch(Exception e){
+                return BadRequest(e.Message);
+            }
         }
         
         /// <summary>Add address to user</summary>
@@ -38,8 +43,13 @@ namespace Cryptocop.Software.API.Controllers
             var user = _sessionService.GetSetUserSession(header);
             var email = user.Email;
             
-            _addressService.AddAddress(email, addressInput);
-            return Ok();
+            try{
+                _addressService.AddAddress(email, addressInput);
+                return Ok();
+            }
+            catch(Exception e){
+                return BadRequest(e.Message);
+            }
         }
         
         /// <summary>Remove address from user</summary>
@@ -48,9 +58,17 @@ namespace Cryptocop.Software.API.Controllers
         [HttpDelete("{id}"), Authorize]
         public IActionResult RemoveAddress(int id)
         {
-            var email = _sessionService.GetUserEmail();
-            _addressService.DeleteAddress(email, id);
-            return Ok();
+            var header = Request.Headers["Authorization"].ToString().Split(" ")[1];
+            var user = _sessionService.GetSetUserSession(header);
+            var email = user.Email;
+            
+            try{
+                _addressService.DeleteAddress(email, id);
+                return Ok();
+            }
+            catch (Exception e){
+                return BadRequest(e.Message);
+            }
         }
     }
 }

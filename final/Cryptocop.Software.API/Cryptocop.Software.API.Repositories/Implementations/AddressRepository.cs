@@ -27,18 +27,18 @@ namespace Cryptocop.Software.API.Repositories.Implementations
                 throw new Exception("User not found");
             }
             
-            //try
-            //{
+            try
+            {
                 var addressEntity = _mapper.Map<Address>(address);
                 //addressEntity.UserId = user.Id;
                 addressEntity.User = user;
                 _dbContext.Addresses.Add(addressEntity);
                 _dbContext.SaveChanges();
-            //}
-            //catch (Exception e)
-            //{
-            //    throw new Exception("Could not add address");
-            //}
+            }
+            catch
+            {
+                throw new Exception("Could not add address");
+            }
         }
 
         public IEnumerable<AddressDto> GetAllAddresses(string email)
@@ -49,23 +49,22 @@ namespace Cryptocop.Software.API.Repositories.Implementations
 
         public void DeleteAddress(string email, int addressId)
         {
-            var address = _dbContext.Addresses.FirstOrDefault(a => a.Id == addressId);
+            var address = _dbContext.Addresses
+                .Include(u => u.User)
+                .Where(a => a.Id == addressId)
+                .FirstOrDefault(u => u.User.Email == email);
+            
             if (address == null)
             {
-                throw new Exception("Address not found");
+                throw new Exception("Address not found, or the user is not the owner of address.");
             }
-            
-            if (address.User.Email != email)
-            {
-                throw new Exception("Address does not belong to user");
-            }
-            
+
             try
             {
                 _dbContext.Addresses.Remove(address);
                 _dbContext.SaveChanges();
             }
-            catch (Exception e)
+            catch
             {
                 throw new Exception("Could not delete address");
             }

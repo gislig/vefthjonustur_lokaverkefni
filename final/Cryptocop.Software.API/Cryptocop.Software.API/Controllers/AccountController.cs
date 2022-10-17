@@ -31,7 +31,7 @@ namespace Cryptocop.Software.API.Controllers
         /// <response code="400">Returns Bad Request if you entered incorrect information or the user already exists</response>
         [SwaggerResponse(200, "Returns OK if account was created", Type = typeof(RegisterInputModel))]
         [HttpPost("register"), AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody] RegisterInputModel userRegistrationInput)
+        public IActionResult Register([FromBody] RegisterInputModel userRegistrationInput)
         {
             var result = _accountService.CreateUser(userRegistrationInput);
             if(result.Email == null)
@@ -45,7 +45,7 @@ namespace Cryptocop.Software.API.Controllers
         /// <response code="400">Returns Bad Request if you entered incorrect username or password</response>
         [SwaggerResponse(200, "Returns OK if account was signed in", Type = typeof(IActionResult))]
         [HttpPost("signin"), AllowAnonymous]
-        public async Task<IActionResult> Signin([FromBody] LoginInputModel loginInput)
+        public IActionResult Signin([FromBody] LoginInputModel loginInput)
         {
             UserDto user = new UserDto();
             HttpContext.Session.TryGetValue("user", out var data);
@@ -103,7 +103,7 @@ namespace Cryptocop.Software.API.Controllers
         [SwaggerResponse(200, "Returns OK if account was signed out", Type = typeof(IActionResult))]
         // TODO: Signout
         [HttpGet("signout")]
-        public async Task<IActionResult> Signout()
+        public IActionResult Signout()
         {
 
             // TODO: This does not work, I get a null reference exception, I am baffled
