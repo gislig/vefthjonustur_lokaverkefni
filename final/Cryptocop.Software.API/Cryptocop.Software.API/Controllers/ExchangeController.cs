@@ -4,21 +4,17 @@
     [ApiController]
     public class ExchangeController : ControllerBase
     {
-        private readonly CrytoDbContext _dbContext;
-        private readonly IMapper _mapper;
+        private readonly IExchangeService _exchangeService;
         
-        public ExchangeController(CrytoDbContext dbContext, IMapper mapper)
+        public ExchangeController(IExchangeService exchangeService)
         {
-            _dbContext = dbContext;
-            _mapper = mapper;
+            _exchangeService = exchangeService;
         }
-        // TODO: Get All exchanges in a paginated envelope
+        
         [HttpGet]
-        public async Task<IActionResult> GetExchanges([FromQuery] int paginationQuery)
+        public async Task<Envelope<ExchangeDto>> GetExchanges([FromQuery] int paginationQuery = 1)
         {
-            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-
-            throw new NotImplementedException();
+            return await _exchangeService.GetExchanges(paginationQuery);
         }
     }
 }

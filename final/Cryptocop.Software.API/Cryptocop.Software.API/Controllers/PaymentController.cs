@@ -1,6 +1,6 @@
 ﻿namespace Cryptocop.Software.API.Controllers
 {
-    [Route("api/payments")]
+    [Route("api/payments"), Authorize]
     [ApiController]
     public class PaymentController : ControllerBase
     {
@@ -17,11 +17,10 @@
         /// <response code="200">Returns all payment cards</response>
         [SwaggerResponse(200, "Returns all payment cards associated with the user", Type = typeof(IEnumerable<PaymentCardDto>))]
         // TODO: Get all payment cards associated with the authenticated user
-        [HttpGet, Authorize]
+        [HttpGet]
         public async Task<IActionResult> GetAllPayments()
         {
             var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-
             
             try{
                 var payments = _paymentService.GetStoredPaymentCards(email);
@@ -36,7 +35,7 @@
         /// <response code="200">Return OK if payment card is added</response>
         [SwaggerResponse(200, "Returns OK if the payment card has been added to the user", Type = typeof(IActionResult))]
         // TODO: Adds a new payment card associated with the authenticated user
-        [HttpPost, Authorize]
+        [HttpPost]
         public async Task<IActionResult> AddPayment([FromBody] PaymentCardInputModel paymentInput)
         {
             var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;

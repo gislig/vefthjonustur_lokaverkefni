@@ -4,14 +4,24 @@
     [Route("api/cryptocurrencies")]
     public class CryptoCurrencyController : ControllerBase
     {
+        private readonly ICryptoCurrencyService _cryptoCurrencyService;
         
-        // TODO: Get all available cryptocurrencies BitCoin (BTC), Ethereum (ETH), Tether (USDT) and Monero (XMR)
+        public CryptoCurrencyController(ICryptoCurrencyService cryptoCurrencyService)
+        {
+            _cryptoCurrencyService = cryptoCurrencyService;
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetCryptocurrencies()
         {
-            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-
-            throw new NotImplementedException();
+            try
+            {
+                return Ok(_cryptoCurrencyService.GetAvailableCryptocurrencies());
+                
+            }catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

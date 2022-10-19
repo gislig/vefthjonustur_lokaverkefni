@@ -19,3 +19,5 @@ global using Cryptocop.Software.API.Repositories.Entities;
 global using Microsoft.AspNetCore.Authorization;
 global using Swashbuckle.AspNetCore.Filters;
 global using System.Security.Claims;
+global using Cryptocop.Software.API.Services.Helpers;
+global using Cryptocop.Software.API.Models;

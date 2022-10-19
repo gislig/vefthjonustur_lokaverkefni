@@ -4,8 +4,9 @@
     {
         public static string MaskPaymentCard(string paymentCardNumber)
         {
-            // TODO: Implement
-            return "";
+            return paymentCardNumber
+                .Substring(0, 6) + "******" + paymentCardNumber
+                .Substring(12, 4);
         }
     }
 }

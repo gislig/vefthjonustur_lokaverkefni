@@ -1,6 +1,6 @@
 ﻿namespace Cryptocop.Software.API.Controllers
 {
-    [Route("api/orders")]
+    [Route("api/orders"), Authorize]
     [ApiController]
     public class OrderController : ControllerBase
     {
@@ -17,7 +17,7 @@
         /// <response code="200">Returns all orders</response>
         [SwaggerResponse(200, "Returns all orders associated with the user", Type = typeof(IEnumerable<OrderDto>))]
         // TODO: Get all orders associated with the authenticated user
-        [HttpGet, Authorize]
+        [HttpGet]
         public async Task<IActionResult> GetOrders()
         {
             var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
@@ -35,7 +35,7 @@
         /// <response code="200">Returns OK if it has added the order</response>
         [SwaggerResponse(200, "Adds order to a user", Type = typeof(IActionResult))]
         // TODO: Add a new order associated with the authenticated ser, see Models section for reference. Remember to update FRomBody.
-        [HttpPost, Authorize]
+        [HttpPost]
         public async Task<IActionResult> AddOrder([FromBody] OrderInputModel orderInput)
         {
             var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;

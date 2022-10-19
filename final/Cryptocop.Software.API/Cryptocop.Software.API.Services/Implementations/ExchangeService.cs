@@ -1,15 +1,44 @@
-﻿using System.Threading.Tasks;
-using Cryptocop.Software.API.Models;
-using Cryptocop.Software.API.Models.Dtos;
-using Cryptocop.Software.API.Services.Interfaces;
+﻿using System.Collections;
 
 namespace Cryptocop.Software.API.Services.Implementations
 {
     public class ExchangeService : IExchangeService
     {
-        public Task<Envelope<ExchangeDto>> GetExchanges(int pageNumber = 1)
+        private readonly IMessariResolverService _messariResolverService;
+
+        public ExchangeService(IMessariResolverService messariResolverService)
         {
-            throw new System.NotImplementedException();
+            _messariResolverService = messariResolverService;
+            
+        }
+
+        public string GetSomething()
+        {
+            return "Hello";
+        }
+        
+        public async Task<Envelope<ExchangeDto>> GetExchanges(int pageNumber = 1)
+        {
+            Console.WriteLine("here");
+
+            var data = await _messariResolverService.GetAllExchanges();
+            
+            
+            // divide data into pages of 10 items, use pageNumber to determine which page to return
+            /*var pages = data.Select((x, i) => new { Index = i, Value = x })
+                .GroupBy(x => x.Index / 10)
+                .Select(x => x.Select(v => v.Value).ToList())
+                .ToList();*/
+
+            
+            // Envelope the data
+            var envelope = new Envelope<ExchangeDto>
+            {
+                PageNumber = pageNumber,
+                Items = data.ToList()
+            };
+            
+            return envelope;
         }
     }
 }

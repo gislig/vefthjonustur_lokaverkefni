@@ -101,7 +101,6 @@ namespace Cryptocop.Software.API.Controllers
         /// <response code="200">Returns OK if Signed out</response>
         /// <response code="400">Returns OK if Signed out</response>
         [SwaggerResponse(200, "Returns OK if account was signed out", Type = typeof(IActionResult))]
-        // TODO: Signout
         [HttpGet("signout")]
         public async Task<IActionResult> Signout()
         {

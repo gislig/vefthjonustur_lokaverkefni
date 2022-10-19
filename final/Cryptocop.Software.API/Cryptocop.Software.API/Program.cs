@@ -18,6 +18,10 @@ builder.Services.AddTransient<IPaymentService, PaymentService>();
 builder.Services.AddTransient<IPaymentRepository, PaymentRepository>();
 builder.Services.AddTransient<IOrderService, OrderService>();
 builder.Services.AddTransient<IOrderRepository, OrderRepository>();
+builder.Services.AddTransient<ICryptoCurrencyService, CryptoCurrencyService>();
+builder.Services.AddTransient<IMessariResolverService, MessariResolverService>();
+builder.Services.AddTransient<IExchangeService, ExchangeService>();
+
 
 builder.Services.AddDistributedMemoryCache();
 string sessionTimeout = builder.Configuration["Session:SessionTimeout"];
@@ -55,6 +59,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
             var token = context.HttpContext.Session.GetString("Token");
             //Console.WriteLine("Found token in middleware service :" + token);
             
+            // Please remember to remove comment so that the token is validated and checked with validation
             /*
             Console.WriteLine();
             if(tokenService.IsTokenBlacklisted(tokenId))

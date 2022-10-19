@@ -1,6 +1,6 @@
 ﻿namespace Cryptocop.Software.API.Controllers
 {
-    [Route("api/addresses")]
+    [Route("api/addresses"), Authorize]
     [ApiController]
     public class AddressController : ControllerBase
     {
@@ -15,7 +15,7 @@
         /// <summary>Get all addresses from logged in user</summary>
         /// <response code="200">Returns all addresses</response>
         [SwaggerResponse(200, "Returns all addresses associated with the user", Type = typeof(IEnumerable<AddressDto>))]
-        [HttpGet, Authorize]
+        [HttpGet]
         public async Task<IActionResult> GetAddresses()
         {
             var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
@@ -31,7 +31,7 @@
         /// <summary>Add address to user</summary>
         /// <response code="200">Returns OK if it has added the address</response>
         [SwaggerResponse(200, "Adds address to a user", Type = typeof(IActionResult))]
-        [HttpPost, Authorize]
+        [HttpPost]
         public async Task<IActionResult> AddAddress([FromBody] AddressInputModel addressInput)
         {
             var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
@@ -49,7 +49,7 @@
         /// <summary>Remove address from user</summary>
         /// <response code="200">Returns OK if address has been removed</response>
         [SwaggerResponse(200, "Removes address from user", Type = typeof(IActionResult))]
-        [HttpDelete("{id}"), Authorize]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveAddress(int id)
         {
             var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
