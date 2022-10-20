@@ -21,7 +21,8 @@ builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 builder.Services.AddTransient<ICryptoCurrencyService, CryptoCurrencyService>();
 builder.Services.AddTransient<IMessariResolverService, MessariResolverService>();
 builder.Services.AddTransient<IExchangeService, ExchangeService>();
-
+builder.Services.AddTransient<IShoppingCartService, ShoppingCartService>();
+builder.Services.AddTransient<IShoppingCartRepository, ShoppingCartRepository>();
 
 builder.Services.AddDistributedMemoryCache();
 string sessionTimeout = builder.Configuration["Session:SessionTimeout"];
