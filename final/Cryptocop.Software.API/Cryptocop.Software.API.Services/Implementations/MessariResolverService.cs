@@ -18,7 +18,6 @@ public class MessariResolverService : IMessariResolverService
             .Result;
         var Crypto = await HttpResponseMessageExtensions
             .DeserializeJsonToList<CryptoResponseDto>(response, true);
-
         
         _mapper.Map(Crypto, newCrypto);
 
