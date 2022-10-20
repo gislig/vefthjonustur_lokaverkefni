@@ -16,7 +16,6 @@
         /// <summary>Get all PaymentCards from logged in user</summary>
         /// <response code="200">Returns all payment cards</response>
         [SwaggerResponse(200, "Returns all payment cards associated with the user", Type = typeof(IEnumerable<PaymentCardDto>))]
-        // TODO: Get all payment cards associated with the authenticated user
         [HttpGet]
         public async Task<IActionResult> GetAllPayments()
         {
@@ -34,13 +33,14 @@
         /// <summary>Add payment card to the logged in user</summary>
         /// <response code="200">Return OK if payment card is added</response>
         [SwaggerResponse(200, "Returns OK if the payment card has been added to the user", Type = typeof(IActionResult))]
-        // TODO: Adds a new payment card associated with the authenticated user
         [HttpPost]
         public async Task<IActionResult> AddPayment([FromBody] PaymentCardInputModel paymentInput)
         {
+            if(!ModelState.IsValid)
+                return BadRequest("Payment data is not valid");
+            
             var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 
-            
             try{
                 _paymentService.AddPaymentCard(email, paymentInput);
                 return Ok();

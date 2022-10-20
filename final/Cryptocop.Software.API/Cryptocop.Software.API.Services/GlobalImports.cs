@@ -17,3 +17,5 @@ global using Newtonsoft.Json.Linq;
 global using System.Linq;
 global using AutoMapper;
 global using Cryptocop.Software.API.Models;
+global using Microsoft.Extensions.Configuration;
+global using RabbitMQ.Client;

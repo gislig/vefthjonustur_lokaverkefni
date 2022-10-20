@@ -4,7 +4,6 @@ LABEL "maintainer"="Gísli Guðmundsson"
 ARG TAG=cryptocop
 ARG NAME=cryptocop
 ENV ASPNETCORE_URLS=http://+:5000
-ENV ASPNETCORE_URLS=https://+:5001
 
 COPY . /app
 WORKDIR /app/Cryptocop.Software.API

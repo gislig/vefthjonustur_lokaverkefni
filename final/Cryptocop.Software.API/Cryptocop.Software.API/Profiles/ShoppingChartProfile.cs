@@ -10,5 +10,9 @@ public class ShoppingChartProfile : Profile
         CreateMap<ShoppingCartItemInputModel, ShoppingCartItem>();
         CreateMap<ShoppingCartItemDto, ShoppingCartItemInputModel>();
         CreateMap<ShoppingCartItem, ShoppingCartItemInputModel>();
+
+        CreateMap<ShoppingCart, ShoppingCartItemDto>();
+
+        CreateMap<ShoppingCartItemDto, ShoppingCart>();
     }
 }

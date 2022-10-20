@@ -38,6 +38,9 @@
         [HttpPost]
         public async Task<IActionResult> AddOrder([FromBody] OrderInputModel orderInput)
         {
+            if(!ModelState.IsValid)
+                return BadRequest("Order is not valid");
+            
             var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             
             try{

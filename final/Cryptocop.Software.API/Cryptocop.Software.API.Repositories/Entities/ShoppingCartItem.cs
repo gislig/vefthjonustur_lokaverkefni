@@ -10,6 +10,6 @@ public class ShoppingCartItem
     public ShoppingCart ShoppingCart { get; set; }
     
     public string ProductIdentifier { get; set; }
-    public double? Quantity { get; set; }
-    public double? UnitPrice { get; set; }
+    public float Quantity { get; set; }
+    public float UnitPrice { get; set; }
 }

@@ -33,6 +33,9 @@ namespace Cryptocop.Software.API.Controllers
         [HttpPost("register"), AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterInputModel userRegistrationInput)
         {
+            if(!ModelState.IsValid)
+                return BadRequest("Registration data incorrect");
+            
             var result = _accountService.CreateUser(userRegistrationInput);
             if(result.Email == null)
                 return BadRequest("User already exists or something went wrong");
@@ -47,6 +50,9 @@ namespace Cryptocop.Software.API.Controllers
         [HttpPost("signin"), AllowAnonymous]
         public async Task<IActionResult> Signin([FromBody] LoginInputModel loginInput)
         {
+            if(!ModelState.IsValid)
+                return BadRequest("Invalid login attempt");
+            
             UserDto user = new UserDto();
             HttpContext.Session.TryGetValue("user", out var data);
             // Convert the data back to a string

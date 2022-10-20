@@ -34,8 +34,10 @@
         [HttpPost]
         public async Task<IActionResult> AddAddress([FromBody] AddressInputModel addressInput)
         {
+            if(!ModelState.IsValid)
+                return BadRequest("Address data incorrect");
+            
             var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-
             
             try{
                 _addressService.AddAddress(email, addressInput);
@@ -54,7 +56,6 @@
         {
             var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 
-            
             try{
                 _addressService.DeleteAddress(email, id);
                 return Ok();

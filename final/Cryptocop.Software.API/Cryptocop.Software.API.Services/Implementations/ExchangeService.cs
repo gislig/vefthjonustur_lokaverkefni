@@ -23,19 +23,17 @@ namespace Cryptocop.Software.API.Services.Implementations
 
             var data = await _messariResolverService.GetAllExchanges();
             
-            
             // divide data into pages of 10 items, use pageNumber to determine which page to return
-            /*var pages = data.Select((x, i) => new { Index = i, Value = x })
+            var pages = data.Select((x, i) => new { Index = i, Value = x })
                 .GroupBy(x => x.Index / 10)
                 .Select(x => x.Select(v => v.Value).ToList())
-                .ToList();*/
-
+                .ToList();
             
             // Envelope the data
             var envelope = new Envelope<ExchangeDto>
             {
                 PageNumber = pageNumber,
-                Items = data.ToList()
+                Items = pages[pageNumber],
             };
             
             return envelope;

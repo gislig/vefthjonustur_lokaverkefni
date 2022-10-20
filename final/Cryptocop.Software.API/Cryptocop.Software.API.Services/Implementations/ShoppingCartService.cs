@@ -32,22 +32,23 @@ namespace Cryptocop.Software.API.Services.Implementations
             
             // TODO: Deserialize the response to a CryptoCurrencyDto model
             // TODO: Add it to the database using the appropriate repository class
-            throw new System.NotImplementedException();
+            _shoppingCartRepository.AddCartItem(email, shoppingCartItemItem, asset.PriceInUsd);
         }
 
         public void RemoveCartItem(string email, int id)
         {
-            throw new System.NotImplementedException();
+            _shoppingCartRepository.RemoveCartItem(email, id);
         }
 
         public void UpdateCartItemQuantity(string email, int id, float quantity)
         {
-            throw new System.NotImplementedException();
+            _shoppingCartRepository.UpdateCartItemQuantity(email, id, quantity);
         }
 
         public void ClearCart(string email)
         {
-            throw new System.NotImplementedException();
+            _shoppingCartRepository.ClearCart(email);
+            _shoppingCartRepository.DeleteCart(email);
         }
     }
 }
