@@ -46,7 +46,7 @@ namespace Cryptocop.Software.API.Repositories.Implementations
                 var tmp = new ShoppingCartItemDto
                 {
                     Id = item.Id,
-                    ProductIdentifier = item.ProductIdentifier,
+                    ProductIdentifier = item.ProductIdentifier.ToUpper(),
                     Quantity = item.Quantity,
                     UnitPrice = item.UnitPrice,
                     TotalPrice = item.Quantity * item.UnitPrice
@@ -69,7 +69,7 @@ namespace Cryptocop.Software.API.Repositories.Implementations
 
             var newCartItem = new ShoppingCartItem()
             {
-                ProductIdentifier = shoppingCartItemItem.ProductIdentifier,
+                ProductIdentifier = shoppingCartItemItem.ProductIdentifier.ToUpper(),
                 Quantity = shoppingCartItemItem.Quantity,
                 UnitPrice = priceInUsd
             };

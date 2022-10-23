@@ -17,6 +17,7 @@ namespace Cryptocop.Software.API.Repositories.Implementations
             _shoppingCartRepository = shoppingCartRepository;
         }
         
+        
         private IEnumerable<OrderDto> SetOrders(List<Order> orders)
         {
             // Did not have the time to figure out automapper, so I did it manually
@@ -59,13 +60,41 @@ namespace Cryptocop.Software.API.Repositories.Implementations
             return orderDtos;
         }
 
+        public OrderDto GetOrder(string email)
+        {
+            var user = _dbContext.Users.FirstOrDefault(u => u.Email == email);
+            if (user == null)
+                throw new Exception("User not found");
+            
+            var order = _dbContext.Orders.Where(o => o.Email == email).OrderBy(a => a.Id).Last();
+            
+            if (order == null)
+                throw new Exception("Order not found");
+            
+            // map order to orderDto
+            var orderDto = new OrderDto();
+            orderDto.Id = order.Id;
+            orderDto.City = order.City;
+            orderDto.Country = order.Country;
+            orderDto.Email = order.Email;
+            orderDto.FullName = order.FullName;
+            orderDto.HouseNumber = order.HouseNumber;
+            orderDto.StreetName = order.StreetName;
+            orderDto.ZipCode = order.ZipCode;
+            orderDto.OrderDate = order.OrderDate.ToString();
+            orderDto.TotalPrice = (float) order.TotalPrice;
+            orderDto.CardholderName = order.CardHolderName;
+            orderDto.CreditCard = order.MaskedCreditCard;
+            orderDto.CardholderName = order.CardHolderName;
+
+            return orderDto;
+        }
+
         public IEnumerable<OrderDto> GetOrders(string email)
         {
             var user = _dbContext.Users.FirstOrDefault(u => u.Email == email);
             if (user == null)
-            {
                 throw new Exception("User not found");
-            }
             
             var orders = _dbContext
                 .Orders
@@ -140,8 +169,9 @@ namespace Cryptocop.Software.API.Repositories.Implementations
             _dbContext.SaveChanges();
             
             // Clear and delete the shopping cart using the ShoppingCartRepository
-            _shoppingCartRepository.ClearCart(email);
-            _shoppingCartRepository.DeleteCart(email);
+            
+            //_shoppingCartRepository.ClearCart(email);
+            //_shoppingCartRepository.DeleteCart(email);
             
             var myOrder = _dbContext
                 .Orders

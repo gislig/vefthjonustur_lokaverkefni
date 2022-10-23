@@ -9,14 +9,17 @@ namespace Cryptocop.Software.API.Controllers
         private readonly IOrderService _orderService;
         private readonly IUserSessionService _sessionService;
         private readonly IQueueService _queueService;
+        private readonly IConfiguration _configuration;
+        private readonly IPaymentService _paymentService;
 
-        public OrderController(IOrderService orderService, IUserSessionService sessionService, IQueueService queueService)
+        public OrderController(IOrderService orderService, IUserSessionService sessionService, IQueueService queueService, IConfiguration configuration, IPaymentService paymentService)
         {
             _orderService = orderService;
             _sessionService = sessionService;
             _queueService = queueService;
+            _configuration = configuration;
+            _paymentService = paymentService;
         }
-
 
         /// <summary>Get all orders from logged in user</summary>
         /// <response code="200">Returns all orders</response>
@@ -51,8 +54,14 @@ namespace Cryptocop.Software.API.Controllers
 
             try
             {
-                _queueService.PublishMessage("order_exchange", orderInput);
+                // Send in creditcard and payment info to the queue service
                 _orderService.CreateNewOrder(email, orderInput);
+
+                //var paymentCard = _paymentService.GetStoredPaymentCards(email).Where(o => o.Id == orderInput.PaymentCardId).FirstOrDefault();
+                var orders = _orderService.GetOrder(email);
+                
+                _queueService.PublishMessage("create-order", orders);
+
                 return Ok();
             }
             catch(Exception e){

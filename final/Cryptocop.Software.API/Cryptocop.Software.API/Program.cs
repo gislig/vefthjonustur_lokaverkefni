@@ -53,19 +53,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         OnTokenValidated = async context =>
         {
             var tokenId = context.Principal.Claims.FirstOrDefault(c => c.Type == "tokenId").Value;
-            var email = context.Principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email).Value;
-            var name = context.Principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
-            var fullName = context.Principal.Claims.FirstOrDefault(c => c.Type == "fullName").Value;
-            // get new claim and convert the claim into an array of data
-
             
             var token = context.HttpContext.Session.GetString("Token");
-            //Console.WriteLine("Found token in middleware service :" + token);
             
-            // Please remember to remove comment so that the token is validated and checked with validation
-            /*
-            Console.WriteLine();
-            if(tokenService.IsTokenBlacklisted(tokenId))
+            var tokenService = context.HttpContext.RequestServices.GetService<IJwtTokenService>();
+            
+            // Convert tokenId to int
+            int tokenIdInt = Convert.ToInt32(tokenId);
+            
+            if(tokenService != null && tokenService.IsTokenBlacklisted(tokenIdInt))
             {
                 // set response to unauthorized
                 context.Response.StatusCode = 401;
@@ -73,7 +69,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
                 // Respond
                 await context.Response.WriteAsync("Invalid token"); 
             }
-            */
         }
     };
 });
