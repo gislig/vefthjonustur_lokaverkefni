@@ -2,7 +2,7 @@
 {
     public class PaymentCardHelper
     {
-        public static string MaskPaymentCard(string paymentCardNumber)
+        public string MaskPaymentCard(string paymentCardNumber)
         {
             return paymentCardNumber
                 .Substring(0, 6) + "******" + paymentCardNumber

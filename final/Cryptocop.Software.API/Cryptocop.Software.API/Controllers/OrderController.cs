@@ -1,4 +1,6 @@
-﻿namespace Cryptocop.Software.API.Controllers
+﻿using Newtonsoft.Json;
+
+namespace Cryptocop.Software.API.Controllers
 {
     [Route("api/orders"), Authorize]
     [ApiController]
@@ -6,12 +8,15 @@
     {
         private readonly IOrderService _orderService;
         private readonly IUserSessionService _sessionService;
+        private readonly IQueueService _queueService;
 
-        public OrderController(IOrderService orderService, IUserSessionService sessionService)
+        public OrderController(IOrderService orderService, IUserSessionService sessionService, IQueueService queueService)
         {
             _orderService = orderService;
             _sessionService = sessionService;
+            _queueService = queueService;
         }
+
 
         /// <summary>Get all orders from logged in user</summary>
         /// <response code="200">Returns all orders</response>
@@ -24,6 +29,7 @@
 
             try{
                 var orders = _orderService.GetOrders(email);
+                
                 return Ok(orders);
             }
             catch(Exception e){
@@ -42,8 +48,10 @@
                 return BadRequest("Order is not valid");
             
             var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            
-            try{
+
+            try
+            {
+                _queueService.PublishMessage("order_exchange", orderInput);
                 _orderService.CreateNewOrder(email, orderInput);
                 return Ok();
             }

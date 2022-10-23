@@ -48,7 +48,7 @@ namespace Cryptocop.Software.API.Services.Implementations
         public void ClearCart(string email)
         {
             _shoppingCartRepository.ClearCart(email);
-            _shoppingCartRepository.DeleteCart(email);
+            //_shoppingCartRepository.DeleteCart(email);
         }
     }
 }

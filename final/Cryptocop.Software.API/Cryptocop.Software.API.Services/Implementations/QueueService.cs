@@ -1,4 +1,6 @@
-﻿namespace Cryptocop.Software.API.Services.Implementations
+﻿using FloatAway.Gateway.Services.Helpers;
+
+namespace Cryptocop.Software.API.Services.Implementations
 {
     public class QueueService : IQueueService, IDisposable
     {
@@ -26,7 +28,13 @@
         
         public void PublishMessage(string routingKey, object body)
         {
-            var jsonBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(body));
+            if(!_channel.IsOpen)
+            {
+                throw new Exception("Channel is not open");
+            }
+            
+            var jsonBytes = Encoding.UTF8.GetBytes(JsonSerializerHelper.SerializeWithCamelCasing(body));
+            
             _channel.BasicPublish(
                 _exchangeName, 
                 routingKey, 
