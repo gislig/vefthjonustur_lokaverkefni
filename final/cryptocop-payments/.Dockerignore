@@ -1,0 +1,5 @@
+log.txt
+*.md
+Dockerfile
+Makefile
+venv
