@@ -4,9 +4,15 @@ namespace Cryptocop.Software.API.Services.Implementations
 {
     public class JwtTokenService : IJwtTokenService
     {
+        private readonly ITokenRepository _tokenRepository;
+        
+        public JwtTokenService(ITokenRepository tokenRepository)
+        {
+            _tokenRepository = tokenRepository;
+        }
         public bool IsTokenBlacklisted(int tokenId)
         {
-            throw new System.NotImplementedException();
+            return _tokenRepository.IsTokenBlacklisted(tokenId);
         }
     }
 }

@@ -1,15 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Cryptocop.Software.API.Models.Dtos;
-using Cryptocop.Software.API.Services.Interfaces;
-
-namespace Cryptocop.Software.API.Services.Implementations
+﻿namespace Cryptocop.Software.API.Services.Implementations
 {
     public class CryptoCurrencyService : ICryptoCurrencyService
     {
+        private readonly IMessariResolverService _messariResolverService;
+        
+        public CryptoCurrencyService(IMessariResolverService messariResolverService)
+        {
+            _messariResolverService = messariResolverService;
+        }
+        
         public Task<IEnumerable<CryptoCurrencyDto>> GetAvailableCryptocurrencies()
         {
-            throw new System.NotImplementedException();
+            return _messariResolverService.GetAllCryptoAssets();
         }
     }
 }

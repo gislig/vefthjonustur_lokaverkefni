@@ -8,29 +8,47 @@ namespace Cryptocop.Software.API.Services.Implementations
 {
     public class ShoppingCartService : IShoppingCartService
     {
-        public IEnumerable<ShoppingCartItemDto> GetCartItems(string email)
+        private readonly IShoppingCartRepository _shoppingCartRepository;
+        private readonly IMessariResolverService _messariResolverService;
+        
+        public ShoppingCartService(IShoppingCartRepository shoppingCartRepository, IMessariResolverService messariResolverService)
         {
-            throw new System.NotImplementedException();
+            _shoppingCartRepository = shoppingCartRepository;
+            _messariResolverService = messariResolverService;
         }
 
-        public Task AddCartItem(string email, ShoppingCartItemInputModel shoppingCartItemItem)
+        public IEnumerable<ShoppingCartItemDto> GetCartItems(string email)
         {
-            throw new System.NotImplementedException();
+            return _shoppingCartRepository.GetCartItems(email);
+        }
+
+        public async Task AddCartItem(string email, ShoppingCartItemInputModel shoppingCartItemItem)
+        {
+            // TODO: Call the external API using the product identifier as an URL
+            // parameter to receive the current price in USD for this particular
+            // cryptocurrency
+            var assets = await _messariResolverService.GetAllCryptoAssets();
+            var asset = assets.First(x => x.Symbol == shoppingCartItemItem.ProductIdentifier);
+            
+            // TODO: Deserialize the response to a CryptoCurrencyDto model
+            // TODO: Add it to the database using the appropriate repository class
+            _shoppingCartRepository.AddCartItem(email, shoppingCartItemItem, asset.PriceInUsd);
         }
 
         public void RemoveCartItem(string email, int id)
         {
-            throw new System.NotImplementedException();
+            _shoppingCartRepository.RemoveCartItem(email, id);
         }
 
         public void UpdateCartItemQuantity(string email, int id, float quantity)
         {
-            throw new System.NotImplementedException();
+            _shoppingCartRepository.UpdateCartItemQuantity(email, id, quantity);
         }
 
         public void ClearCart(string email)
         {
-            throw new System.NotImplementedException();
+            _shoppingCartRepository.ClearCart(email);
+            //_shoppingCartRepository.DeleteCart(email);
         }
     }
 }

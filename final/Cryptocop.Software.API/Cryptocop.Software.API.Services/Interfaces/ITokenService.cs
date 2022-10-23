@@ -1,9 +1,6 @@
-﻿using Cryptocop.Software.API.Models.Dtos;
-
-namespace Cryptocop.Software.API.Services.Interfaces
+﻿namespace Cryptocop.Software.API.Services.Interfaces;
+public interface ITokenService
 {
-    public interface ITokenService
-    {
-        string GenerateJwtToken(UserDto user);
-    }
+    string GenerateJwtToken(UserDto user);
+    bool IsBlacklisted(int tokenId);
 }
