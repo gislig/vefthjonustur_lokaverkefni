@@ -66,7 +66,9 @@ namespace Cryptocop.Software.API.Repositories.Implementations
             if (user == null)
                 throw new Exception("User not found");
             
-            var order = _dbContext.Orders.Where(o => o.Email == email).OrderBy(a => a.Id).Last();
+            var order = _dbContext.Orders
+                .Include(a => a.OrderItems)
+                .Where(o => o.Email == email).OrderBy(a => a.Id).Last();
             
             if (order == null)
                 throw new Exception("Order not found");
@@ -87,6 +89,20 @@ namespace Cryptocop.Software.API.Repositories.Implementations
             orderDto.CreditCard = order.MaskedCreditCard;
             orderDto.CardholderName = order.CardHolderName;
 
+            var orderItems = new List<OrderItemDto>();
+            foreach(var item in order.OrderItems)
+            {
+                var orderItem = new OrderItemDto();
+                orderItem.Id = item.Id;
+                orderItem.Quantity = (float) item.Quantity;
+                orderItem.UnitPrice = (float) item.UnitPrice;
+                orderItem.ProductIdentifier = item.ProductIdentifier;
+                orderItem.TotalPrice = (float) item.TotalPrice;
+                orderItems.Add(orderItem);
+            }
+            
+            orderDto.OrderItems = orderItems;
+            
             return orderDto;
         }
 

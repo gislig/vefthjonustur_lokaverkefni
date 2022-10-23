@@ -21,8 +21,6 @@ namespace Cryptocop.Software.API.Services.Implementations
 
         public void CreateNewOrder(string email, OrderInputModel order)
         {
-            // Hérna ætti að vera publish á message í message queue
-            
             _orderRepository.CreateNewOrder(email, order);
         }
 

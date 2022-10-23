@@ -1,37 +1,30 @@
 from multiprocessing import connection
 import json, pika
 from luhn_validator import validate
+from dotenv import load_dotenv
+import os
+load_dotenv()
+host = os.getenv('HOST')
+exchange = os.getenv('EXCHANGE')
+queue = os.getenv('QUEUE')
+routing_key = os.getenv('ROUTING_KEY')
 
-host = "localhost"
-exchange = "order-exchange"
-queue = "payment-queue"
-routing_key = "create-order"
-
-def setup():
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host))
-    channel = connection.channel()
-    channel.exchange_declare(exchange=exchange, exchange_type='topic', durable=True)
-    channel.queue_declare(queue, durable=False)
-    channel.queue_bind(exchange=exchange, queue=queue, routing_key=routing_key)
-    return channel, connection
-
-channel, connection = setup()
-
+connection = pika.BlockingConnection(pika.ConnectionParameters(host=host))
+channel = connection.channel()
+channel.exchange_declare(exchange=exchange, exchange_type='topic', durable=True)
+channel.queue_declare(queue=queue)
+channel.queue_bind(exchange=exchange, queue=queue, routing_key=routing_key)
 def output(ch, method, properties, data):
     load_data: str = json.loads(data)
     card_number = load_data["creditCard"]
     result = validate(card_number)
-
     if result:
         print("Payment is successful, correct card number")
     else:
         print("Payment is not successful, incorrect card number")
-
-
 channel.basic_consume(
     queue=queue,
     auto_ack=True,
     on_message_callback=output)
-
 channel.start_consuming()
 connection.close()
