@@ -186,8 +186,8 @@ namespace Cryptocop.Software.API.Repositories.Implementations
             
             // Clear and delete the shopping cart using the ShoppingCartRepository
             
-            //_shoppingCartRepository.ClearCart(email);
-            //_shoppingCartRepository.DeleteCart(email);
+            _shoppingCartRepository.ClearCart(email);
+            _shoppingCartRepository.DeleteCart(email);
             
             var myOrder = _dbContext
                 .Orders
