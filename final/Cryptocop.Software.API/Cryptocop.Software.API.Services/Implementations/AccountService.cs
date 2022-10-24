@@ -20,7 +20,6 @@
             return user;
         }
 
-        // TODO: Need to implement logout functionality in repostitory
         public void Logout(int tokenId)
         {
             var token = _userRepository.LogoutUser(tokenId);

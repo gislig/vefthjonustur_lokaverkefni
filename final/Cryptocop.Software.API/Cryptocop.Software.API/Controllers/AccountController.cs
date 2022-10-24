@@ -88,14 +88,9 @@ namespace Cryptocop.Software.API.Controllers
             // If there is no session then continue with creating a new session
             var tokenString = _tokenService.GenerateJwtToken(result);
             var tokenHandler = new JwtSecurityTokenHandler();
-            //tokenHandler.WriteToken(tokenString);
             
             result.Identifier = tokenString;
             HttpContext.Session.SetString("Token", tokenString);
-            // TODO: Fix this, it seems like I get a null reference exception here, I am baffled
-            //var success = _userSessionRepository.CreateUserSession(result);
-            //if(!success)
-            //    return BadRequest("Unable to create session storage");
             var json = JsonConvert.SerializeObject(result);
             var newData = Encoding.UTF8.GetBytes(json);
             HttpContext.Session.Set("user", newData);
@@ -110,14 +105,6 @@ namespace Cryptocop.Software.API.Controllers
         [HttpGet("signout")]
         public async Task<IActionResult> Signout()
         {
-
-            // TODO: This does not work, I get a null reference exception, I am baffled
-            /*var loggedOut = _userSessionService.RemoveUserSession();
-            if(!loggedOut)
-                return BadRequest("Unable to sign out");
-            
-            return Ok("Signed out");*/
-            
             // Get the session data
             HttpContext.Session.TryGetValue("user", out byte[] data);
             

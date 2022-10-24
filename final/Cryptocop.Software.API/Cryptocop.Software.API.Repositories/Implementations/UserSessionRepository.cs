@@ -41,15 +41,6 @@ public class UserSessionRepository : IUserSessionRepository
         var json = JsonConvert.SerializeObject(user);
         var data = Encoding.UTF8.GetBytes(json);
         
-        //Console.WriteLine(user.Identifier);
-        
-        // save the result to session storage
-
-        // Somehow this does not work
-        // Create a key for the session
-        // Save the session
-        //_session.Set("user", data);
-        
         _httpContext.Session.Set("user", data);
 
         if (!IsUserLoggedIn())
@@ -88,10 +79,7 @@ public class UserSessionRepository : IUserSessionRepository
         Console.WriteLine("empty?" + token);
         
         // Get data from principal claims
-        
-        return "bleh";
-        
-        //return GetUserSessionData().Identifier;
+        return Encoding.UTF8.GetString(token);
     }
 
     public string GetUserFullName()

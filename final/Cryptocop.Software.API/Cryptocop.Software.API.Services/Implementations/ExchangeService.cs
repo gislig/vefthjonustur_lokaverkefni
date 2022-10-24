@@ -11,16 +11,9 @@ namespace Cryptocop.Software.API.Services.Implementations
             _messariResolverService = messariResolverService;
             
         }
-
-        public string GetSomething()
-        {
-            return "Hello";
-        }
         
         public async Task<Envelope<ExchangeDto>> GetExchanges(int pageNumber = 1)
         {
-            Console.WriteLine("here");
-
             var data = await _messariResolverService.GetAllExchanges();
             
             // divide data into pages of 10 items, use pageNumber to determine which page to return

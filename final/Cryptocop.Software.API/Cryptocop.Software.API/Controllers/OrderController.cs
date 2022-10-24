@@ -24,7 +24,6 @@ namespace Cryptocop.Software.API.Controllers
         /// <summary>Get all orders from logged in user</summary>
         /// <response code="200">Returns all orders</response>
         [SwaggerResponse(200, "Returns all orders associated with the user", Type = typeof(IEnumerable<OrderDto>))]
-        // TODO: Get all orders associated with the authenticated user
         [HttpGet]
         public async Task<IActionResult> GetOrders()
         {
@@ -43,7 +42,6 @@ namespace Cryptocop.Software.API.Controllers
         /// <summary>Add order to user</summary>
         /// <response code="200">Returns OK if it has added the order</response>
         [SwaggerResponse(200, "Adds order to a user", Type = typeof(IActionResult))]
-        // TODO: Add a new order associated with the authenticated ser, see Models section for reference. Remember to update FRomBody.
         [HttpPost]
         public async Task<IActionResult> AddOrder([FromBody] OrderInputModel orderInput)
         {

@@ -1,6 +1,6 @@
 ﻿namespace Cryptocop.Software.API.Controllers
 {
-    [Route("api/exchanges")]
+    [Route("api/exchanges"), Authorize]
     [ApiController]
     public class ExchangeController : ControllerBase
     {

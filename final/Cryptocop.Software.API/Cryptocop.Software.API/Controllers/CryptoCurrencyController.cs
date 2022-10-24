@@ -1,7 +1,7 @@
 ﻿namespace Cryptocop.Software.API.Controllers
 {
     [ApiController]
-    [Route("api/cryptocurrencies")]
+    [Route("api/cryptocurrencies"), Authorize]
     public class CryptoCurrencyController : ControllerBase
     {
         private readonly ICryptoCurrencyService _cryptoCurrencyService;

@@ -24,14 +24,11 @@ namespace Cryptocop.Software.API.Services.Implementations
 
         public async Task AddCartItem(string email, ShoppingCartItemInputModel shoppingCartItemItem)
         {
-            // TODO: Call the external API using the product identifier as an URL
             // parameter to receive the current price in USD for this particular
             // cryptocurrency
             var assets = await _messariResolverService.GetAllCryptoAssets();
             var asset = assets.First(x => x.Symbol == shoppingCartItemItem.ProductIdentifier);
             
-            // TODO: Deserialize the response to a CryptoCurrencyDto model
-            // TODO: Add it to the database using the appropriate repository class
             _shoppingCartRepository.AddCartItem(email, shoppingCartItemItem, asset.PriceInUsd);
         }
 
