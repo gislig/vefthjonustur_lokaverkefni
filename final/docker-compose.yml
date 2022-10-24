@@ -1,0 +1,38 @@
+services:
+  message-broker:
+    image: rabbitmq:3.11-management
+    hostname: "rabbitmq"
+    container_name: message-broker
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+        - "HOSTNAME=message-broker"
+        - "default_user=user"
+        - "default_pass=pass"
+        - "default_vhost=/"
+    networks:
+        - "cryptocop-network"
+  api-gateway:
+    build: ./Cryptocop.Software.API
+    hostname: "api-gateway"
+    container_name: Cryptocop.Software.API
+    ports:
+      - "5000:5000"
+    networks:
+      - "cryptocop-network"
+  payment-service:
+    build: ./cryptocop-payments
+    hostname: "payment-service"
+    container_name: cryptocop-payments
+    networks:
+      - "cryptocop-network"
+  email-service:
+    build: ./cryptocop-emails
+    hostname: "email-service"
+    container_name: cryptocop-emails
+    networks:
+      - "cryptocop-network"
+networks:
+  cryptocop-network:
+    driver: bridge

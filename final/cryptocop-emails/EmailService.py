@@ -5,10 +5,11 @@ from luhn_validator import validate
 from dotenv import load_dotenv
 import os
 load_dotenv()
-host = os.getenv('HOST')
-exchange = os.getenv('EXCHANGE')
-queue = os.getenv('QUEUE')
-routing_key = os.getenv('ROUTING_KEY')
+host = os.getenv('HOST') or 'rabbitmq'
+exchange = os.getenv('EXCHANGE') or 'order-exchange'
+queue = os.getenv('QUEUE') or 'email-queue'
+routing_key = os.getenv('ROUTING_KEY') or 'create-order'
+
 
 mailgun_sandbox = "https://api.mailgun.net/v3/sandbox2fa604222f7c4ddea98f4269f0e435e3.mailgun.org/messages"
 mailgun_api = "5020f0d0f059324afa7211d149494db3-d117dd33-a913e1a2"
@@ -41,6 +42,7 @@ def send_email(ch, method, properties, data):
               "subject": subject,
               "text": html_body})
 
+print("[*] Waiting for messages. To exit press CTRL+C")
 channel, connection = setup()
 
 channel.basic_consume(
